@@ -7,7 +7,7 @@ const Footer = () => {
         &copy; 2024 MosquEase. All rights reserved.
       </p>
       <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-        <Link to="#" className="text-xs hover:underline underline-offset-4">
+        <Link to="/about" className="text-xs hover:underline underline-offset-4">
           About Us
         </Link>
         <Link to="#" className="text-xs hover:underline underline-offset-4">

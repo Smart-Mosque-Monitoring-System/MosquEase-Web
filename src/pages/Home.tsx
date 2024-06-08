@@ -3,10 +3,13 @@ import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { FaArrowRight } from 'react-icons/fa';
+import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/navbar";
 
 const Home = () => {
   return (
     <Wrapper className="flex flex-col items-center justify-center mt-36">
+      <Navbar/>
       <div className="mt-8 flex w-1/2">
         <div className="w-1/2">
           <img src="/src/assets/hero.jpg" alt="placeholder" className="h-[300px] w-[300px] bg-gray-200" />
@@ -56,6 +59,7 @@ const Home = () => {
           </Card>
         </div>
       </div>
+      <Footer/>
     </Wrapper>
   );
 };
