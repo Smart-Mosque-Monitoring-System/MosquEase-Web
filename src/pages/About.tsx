@@ -56,7 +56,7 @@ const About = () => {
               <div className="flex flex-col items-center justify-center space-y-4">
                 <div className="text-center">
                   <h3 className="text-lg font-bold">Dwiky Hared Darmawan</h3>
-                  <p className="text-gray-500 dark:text-gray-400">18220048</p>
+                  <p className="text-gray-500 dark:text-gray-400">18219048</p>
                 </div>
               </div>
             </div>
