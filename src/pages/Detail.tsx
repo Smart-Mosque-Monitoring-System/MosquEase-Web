@@ -14,11 +14,29 @@ import image1 from "/src/assets/image1.jpg";
 import image2 from "/src/assets/image2.jpg";
 import image3 from "/src/assets/image3.jpg";
 
+const haversineDistance = (coords1, coords2) => {
+    const toRad = (angle) => (angle * Math.PI) / 180;
+
+    const R = 6371e3; // Radius of the Earth in meters
+    const dLat = toRad(coords2.latitude - coords1.latitude);
+    const dLon = toRad(coords2.longitude - coords1.longitude);
+    const lat1 = toRad(coords1.latitude);
+    const lat2 = toRad(coords2.latitude);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in meters
+
+    return distance;
+};
 
 const Detail = () => {
     const [liveUpdate, setLiveUpdate] = useState({});
     const [mosqueData, setMosqueData] = useState({});
-    const [bmeData, setBmeData] = useState({})
+    const [bmeData, setBmeData] = useState({});
+    const [distance, setDistance] = useState(null);
     const carouselImages = [image1, image2, image3];
 
     useEffect(() => {
@@ -60,8 +78,9 @@ const Detail = () => {
                     throw counterError;
                 }
                 
-                setMosqueData({ ...mosqueData, current_count: personCounterData[0]?.head_count });
-                console.log(mosqueData);
+                const updatedMosqueData = { ...mosqueData, current_count: personCounterData[0]?.head_count };
+                setMosqueData(updatedMosqueData);
+
                 const { data: bmeData, error: bmeError } = await supabase
                     .from('bme280')
                     .select('*')
@@ -74,6 +93,28 @@ const Detail = () => {
 
                 setBmeData(bmeData[0] || {});
 
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const userLocation = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                            };
+                            const mosqueLocation = {
+                                latitude: updatedMosqueData.latitude,
+                                longitude: updatedMosqueData.longitude,
+                            };
+                            const dist = haversineDistance(userLocation, mosqueLocation);
+                            setDistance(dist);
+                            console.log(userLocation)
+                        },
+                        (error) => {
+                            console.error("Error getting user location:", error);
+                        }
+                    );
+                } else {
+                    console.error("Geolocation is not supported by this browser.");
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -87,10 +128,11 @@ const Detail = () => {
             <Navbar/>
             <div className="mosque-info mt-20 py-10 px-40">
                 <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">{mosqueData.name || '--'}</h1>
-                <p className="flex justify-between items-center">
-                    <FaMapMarkerAlt className="mr-2"/>  49 meters from you
-                </p>
+                    <h1 className="text-2xl font-bold">{mosqueData.name || '--'}</h1>
+                    <p className="flex justify-between items-center">
+                        <FaMapMarkerAlt className="mr-2"/> 
+                        {distance !== null ? `${(distance / 1000).toFixed(2)} kilometers from you` : 'Calculating distance...'}
+                    </p>
                 </div>
                 <Separator className="mt-4" />
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -100,23 +142,23 @@ const Detail = () => {
                             <span className="text-sm text-gray-500">Updated 1 mins ago</span>
                         </CardHeader>
                         <CardContent>
-                        <div className="flex flex-row justify-center items-center">
-                            <img src={liveUpdate.imgSrc} alt="live-update" className="w-1/2 object-cover rounded-lg mb-10" />
+                            <div className="flex flex-row justify-center items-center">
+                                <img src={liveUpdate.imgSrc} alt="live-update" className="w-1/2 object-cover rounded-lg mb-10" />
                             </div> 
-                                <div className="grid grid-cols-3 gap-4 text-center">
-                                    <div>
-                                        <p className="text-2xl font-bold">{bmeData.humidity || '--'}</p>
-                                        <p className="text-sm text-gray-500">% RH</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-2xl font-bold">{bmeData.temperature || '--'}</p>
-                                        <p className="text-sm text-gray-500">°Celsius</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-2xl font-bold">{mosqueData.current_count || '--'}</p>
-                                        <p className="text-sm text-gray-500">/{mosqueData.capacity || '--'}</p>
-                                    </div>
+                            <div className="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <p className="text-2xl font-bold">{bmeData.humidity || '--'}</p>
+                                    <p className="text-sm text-gray-500">% RH</p>
                                 </div>
+                                <div>
+                                    <p className="text-2xl font-bold">{bmeData.temperature || '--'}</p>
+                                    <p className="text-sm text-gray-500">°Celsius</p>
+                                </div>
+                                <div>
+                                    <p className="text-2xl font-bold">{mosqueData.current_count || '--'}</p>
+                                    <p className="text-sm text-gray-500">/{mosqueData.capacity || '--'}</p>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -124,8 +166,8 @@ const Detail = () => {
                             <CardTitle className="text-lg">PICTURES</CardTitle>
                         </CardHeader>
                         <CardContent>
-                        <div className="px-20">
-                        <Carousel className="w-full">
+                            <div className="px-20">
+                                <Carousel className="w-full">
                                     <CarouselContent>
                                         {carouselImages.map((image, index) => (
                                             <CarouselItem key={index}>
@@ -142,7 +184,7 @@ const Detail = () => {
                                     <CarouselPrevious />
                                     <CarouselNext />
                                 </Carousel>
-                        </div>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
