@@ -7,7 +7,7 @@ type WrapperProps = React.DetailedHTMLProps<
 
 const Wrapper = ({ children, className, ...props }: WrapperProps) => {
   return (
-    <main className={cn(["w-full h-full px-6 pt-20", className])} {...props}>
+    <main className={cn(["", className])} {...props}>
       {children}
     </main>
   );

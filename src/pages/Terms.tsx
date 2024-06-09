@@ -1,19 +1,20 @@
 import Wrapper from "@/components/wrapper";
 import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar";
+import { Separator } from "@/components/ui/separator";
 
-const About = () => {
+const Terms = () => {
     return (
         <Wrapper>
             <Navbar/>
             <div className="flex flex-col">
                 <div className="flex justify-center content-center pt-16">
-                    <h1 className="text-4xl font-bold">Terms of Services</h1>
+                    <h1 className="text-4xl font-bold mt-10 -mb-5">Terms of Services</h1>
                 </div>
-                <div className="px-96 py-10">
+                <div className="px-96 pt-10 pb-24">
                     <p className="text-justify">
-                        <p>Selamat datang di Website MosquEase! Website ini menyediakan layanan untuk mencari masjid terdekat di sekitar lokasi pengguna serta memberikan informasi real-time mengenai kapasitas, suhu, dan kelembaban masjid. Dengan menggunakan website ini, Anda setuju untuk mematuhi dan terikat oleh syarat dan ketentuan berikut ini. Jika Anda tidak setuju dengan syarat dan ketentuan ini, harap jangan menggunakan website ini.</p>
-
+                        <p className="text-center text-md text-slate-500">MosquEase ini menyediakan layanan untuk mencari masjid terdekat di sekitar lokasi pengguna serta memberikan informasi real-time mengenai kapasitas, suhu, dan kelembaban masjid. Dengan menggunakan website ini, Anda setuju untuk mematuhi dan terikat oleh syarat dan ketentuan berikut ini.</p>
+                        <Separator className="my-10" />
                         <p><strong>1. Penerimaan Syarat</strong></p>
 
                         <p>Dengan mengakses atau menggunakan website kami, Anda menyetujui syarat dan ketentuan ini. Syarat dan ketentuan ini dapat diubah oleh MakKauHijau dari waktu ke waktu, dan penggunaan website yang berkelanjutan setelah perubahan tersebut berarti Anda menerima syarat yang telah diubah.</p>
@@ -50,12 +51,6 @@ const About = () => {
                         <p><strong>8. Hukum yang Berlaku</strong></p>
 
                         <p>Syarat dan ketentuan ini diatur oleh dan ditafsirkan sesuai dengan hukum yang berlaku di Indonesia. Setiap sengketa yang timbul dari atau sehubungan dengan syarat dan ketentuan ini akan diselesaikan di pengadilan yang berwenang di Indonesia.</p>
-
-                        <p><strong>9. Kontak</strong></p>
-
-                        <p>Jika Anda memiliki pertanyaan atau masalah terkait syarat dan ketentuan ini, silakan hubungi kami di makkauhijau@gmail.com.</p>
-
-                        <p>Dengan menggunakan website ini, Anda menyetujui syarat dan ketentuan ini. Terima kasih telah menggunakan MosquEase!</p>
                     </p>
                 </div>
             </div>
@@ -64,4 +59,4 @@ const About = () => {
     );
 }
 
-export default About;
+export default Terms;

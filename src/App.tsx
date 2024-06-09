@@ -8,6 +8,9 @@ import Providers from "@/components/providers";
 
 import Terms from "./pages/Terms"
 
+import Detail from "./pages/Detail"
+
+
 function App() {
   return (
     <Providers>
@@ -16,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />}/>
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />}/>
+          <Route path="/detail" element={<Detail />}/>
         </Routes>
       </Router>
     </Providers>

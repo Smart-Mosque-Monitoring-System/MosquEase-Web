@@ -2,8 +2,6 @@ import NavLinks from "./nav-links";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 import H4 from "@/components/typo/H4";
-import { Github } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const navbar = () => {
   return (
