@@ -5,12 +5,12 @@ const itemsArray = [
   {
     title: "Home",
     icon: User,
-    redirect: "#",
+    redirect: "/",
   },
   {
     title: "About Us",
     icon: Group,
-    redirect: "#",
+    redirect: "/about",
   },
   {
     title: "Find Mosque",
