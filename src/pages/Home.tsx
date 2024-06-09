@@ -10,30 +10,39 @@ import { supabase } from "../supabaseClient";
 import image1 from "/src/assets/image1.jpg";
 import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
-  const [mosques, setMosques] = useState([]);
+// Define the types for the mosque and person counter data
+interface Mosque {
+  id: number;
+  name: string;
+  capacity: number;
+  current_count?: number;
+}
+
+interface PersonCounter {
+  id: number;
+  head_count: number;
+}
+
+const Home: React.FC = () => {
+  const [mosques, setMosques] = useState<Mosque[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMosques = async () => {
       try {
         const { data: mosquesData, error: mosquesError } = await supabase
-          .from('mosque')
-          .select(`
-            id,
-            name,
-            capacity
-          `);
+          .from<Mosque>('mosque')
+          .select('id, name, capacity');
 
         if (mosquesError) {
           throw mosquesError;
         }
 
-        const mosquesWithLatestCount = [];
+        const mosquesWithLatestCount: Mosque[] = [];
 
         for (const mosque of mosquesData) {
           const { data: personCounterData, error: counterError } = await supabase
-            .from('person_counter')
+            .from<PersonCounter>('person_counter')
             .select('id, head_count')
             .eq('mosque_id', mosque.id)
             .order('id', { ascending: false })

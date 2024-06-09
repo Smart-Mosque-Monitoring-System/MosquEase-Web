@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Wrapper from "@/components/wrapper";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { FaArrowRight } from 'react-icons/fa';
 import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar";
 import { supabase } from "../supabaseClient";
 import image1 from "/src/assets/image1.jpg";
 import { useNavigate } from 'react-router-dom';
 
+interface Mosque {
+  id: number;
+  name: string;
+  capacity: number;
+  current_count: number;
+}
+
 const FindMosque = () => {
-  const [mosques, setMosques] = useState([]);
+  const [mosques, setMosques] = useState<Mosque[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +34,7 @@ const FindMosque = () => {
           throw mosquesError;
         }
 
-        const mosquesWithLatestCount = [];
+        const mosquesWithLatestCount: Mosque[] = [];
 
         for (const mosque of mosquesData) {
           const { data: personCounterData, error: counterError } = await supabase

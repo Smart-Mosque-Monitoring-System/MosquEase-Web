@@ -4,7 +4,6 @@ import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -14,10 +13,35 @@ import image1 from "/src/assets/image1.jpg";
 import image2 from "/src/assets/image2.jpg";
 import image3 from "/src/assets/image3.jpg";
 
-const haversineDistance = (coords1, coords2) => {
-    const toRad = (angle) => (angle * Math.PI) / 180;
+interface Coordinates {
+    latitude: number;
+    longitude: number;
+}
 
-    const R = 6371e3; // Radius of the Earth in meters
+interface LiveUpdateData {
+    imgSrc: string;
+}
+
+interface MosqueData {
+    id?: number;
+    name?: string;
+    latitude?: number;
+    longitude?: number;
+    capacity?: number;
+    current_count?: number;
+    address?: string;
+    facilities?: string[];
+}
+
+interface BmeData {
+    humidity?: number;
+    temperature?: number;
+}
+
+const haversineDistance = (coords1: Coordinates, coords2: Coordinates): number => {
+    const toRad = (angle: number): number => (angle * Math.PI) / 180;
+
+    const R = 6371e3; 
     const dLat = toRad(coords2.latitude - coords1.latitude);
     const dLon = toRad(coords2.longitude - coords1.longitude);
     const lat1 = toRad(coords1.latitude);
@@ -27,16 +51,15 @@ const haversineDistance = (coords1, coords2) => {
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in meters
-
+    const distance = R * c; 
     return distance;
 };
 
 const Detail = () => {
-    const [liveUpdate, setLiveUpdate] = useState({});
-    const [mosqueData, setMosqueData] = useState({});
-    const [bmeData, setBmeData] = useState({});
-    const [distance, setDistance] = useState(null);
+    const [liveUpdate, setLiveUpdate] = useState<LiveUpdateData>({});
+    const [mosqueData, setMosqueData] = useState<MosqueData>({});
+    const [bmeData, setBmeData] = useState<BmeData>({});
+    const [distance, setDistance] = useState<number | null>(null);
     const carouselImages = [image1, image2, image3];
 
     useEffect(() => {
@@ -113,7 +136,7 @@ const Detail = () => {
                         }
                     );
                 } else {
-                    console.error("Geolocation is not supported by this browser.");
+                    console.error("Geolocation is not supported.");
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
