@@ -15,7 +15,7 @@ const itemsArray = [
   {
     title: "Find Mosque",
     icon: User,
-    redirect: "#",
+    redirect: "/findmosque",
   },
 ];
 
